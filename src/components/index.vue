@@ -20,13 +20,14 @@ export default {
     //    */
     //   console.log(this)
     // }, 1000)
+
     /**
      * 2秒后从介绍页跳转到内容展示
-     * @type {String}
+     * @type {function}
      */
     setTimeout(() => {
       // 使用箭头函数 this指向 index组件
-      this.$router.push('topic')
+      this.$router.replace('topic')
     }, 2000)
   }
 }
@@ -36,7 +37,7 @@ export default {
   .logo-container{
     width: 200px;
     margin : 20vh auto 0;
-    
+
     img{
       width: 100%;
     }
