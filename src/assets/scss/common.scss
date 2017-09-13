@@ -80,6 +80,7 @@ select {
   $header-height : 44px;
   $padding : 15px;
   $margin10 : 10px;
+  $authorImg : 40px;
 
   $radius: 4px;
   $font-title: 16px;
@@ -90,7 +91,10 @@ select {
   /*颜色常量*/
   $color42b : #42b983;
   $colord4 : #d4d4d4;
-  $clolrff : #ffffff;
+  $white: #ffffff;
+  $light: #d5dbdb;
+  $title: #2c3e50;
+  $text: #34495e;
 .line-bottom{
   border-bottom: 1px solid $colord4;
 }
@@ -103,4 +107,10 @@ select {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.author-img{
+  width: $authorImg;
+  height: $authorImg;
+  border-radius: 50%;
 }
