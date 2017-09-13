@@ -1,24 +1,26 @@
 <template lang="html">
-  <div class="container">
+  <div class="container" v-show="topics.length > 0">
     <div class="topic-mask" v-show="showNav" @click="changeNavAndMask"></div>
     <topicHeader :title="title" :show-menu="showMenu" :show-nav="showNav" v-on:change="changeNavAndMask"></topicHeader>
     <topicNav :class="{'show-nav' : showNav}"></topicNav>
     <ul class="topic-list">
       <li class="topic-item" v-for="topic in topics">
-        <h3 :title="getTabInfo(topic.tab,topic.good,topic.top,false)" class="title single-row" :class="getTabInfo(topic.tab,topic.good,topic.top,true)">{{topic.title}}</h3>
-        <div class="info">
-          <img :src="topic.author.avatar_url" alt="用户头像" class="user-avatar">
-          <div class="content">
-            <p>
-              <span class="name">{{topic.author.loginname}}</span>
-              <span class="status"><b>{{topic.reply_count}}</b> /{{topic.visit_count}}</span>
-            </p>
-            <p>
-              <time>{{topic.create_at | formatDate}}</time>
-              <time>{{topic.last_reply_at | formatDate}}</time>
-            </p>
+        <router-link :to="{ name: 'detail', params: {id : topic.id} }">
+          <h3 :title="getTabInfo(topic.tab,topic.good,topic.top,false)" class="title single-row" :class="getTabInfo(topic.tab,topic.good,topic.top,true)">{{topic.title}}</h3>
+          <div class="info">
+            <img :src="topic.author.avatar_url" alt="用户头像" class="user-avatar">
+            <div class="content">
+              <p>
+                <span class="name">{{topic.author.loginname}}</span>
+                <span class="status"><b>{{topic.reply_count}}</b> /{{topic.visit_count}}</span>
+              </p>
+              <p>
+                <time>{{topic.create_at | formatDate}}</time>
+                <time>{{topic.last_reply_at | formatDate}}</time>
+              </p>
+            </div>
           </div>
-        </div>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -73,9 +75,9 @@ export default {
     }
   },
   filters: {
-    // formatDate: function (value) {
-    //   return util.formatDate(value)
-    // }
+    formatDate: function (value) {
+      return util.formatDate(value, true)
+    }
   }
 }
 </script>
@@ -85,6 +87,7 @@ export default {
 .container {
     height: 100%;
     position: relative;
+    padding-top: 45px;
 
     .topic-mask {
         position: absolute;
@@ -98,8 +101,7 @@ export default {
 
     .topic-list {
         width: 100%;
-        height: calc(100% - 45px);
-        margin-top: 45px;
+        height: 100%; //是以父元素content的值为基数的
         overflow-x: hidden;
         overflow-y: scroll;
 
@@ -109,6 +111,7 @@ export default {
             padding: $padding;
 
           .title{
+            color: $title;
 
             &::before{
               display: inline-block;
@@ -120,7 +123,7 @@ export default {
               margin-right: $margin10;
               vertical-align: middle;
               text-align: center;
-              color: $clolrff;
+              color: $white;
               font-weight: 400;
             }
 
@@ -142,14 +145,12 @@ export default {
           }
 
           .info{
-            margin-top: $margin10;
+            padding-top: $margin10;
             display: flex;
             flex-direction: row;
 
             img{
-              width: 40px;
-              height: 40px;
-              border-radius: 50%;
+              @extend .author-img;
               margin-right: $margin10;
             }
 
@@ -160,6 +161,7 @@ export default {
               p{
                 display: inline-flex;
                 width: 100%;
+                color: $text;
 
                 .name{
                   flex: 1;

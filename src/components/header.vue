@@ -3,7 +3,7 @@
       <div class="left-menu" v-show="showMenu" @click="toggleNav">
         <span class="fa fa-bars"></span>
       </div>
-      <div class="left-back" v-show="!showMenu">
+      <div class="left-back" v-show="!showMenu" @click="goback">
         <span class="fa fa-chevron-left"></span>
       </div>
       <span class="title">{{title}}</span>
@@ -28,6 +28,9 @@ export default {
   methods: {
     toggleNav: function () {
       this.$emit('change')
+    },
+    goback: function () {
+      this.$router.go(-1)
     }
   }
 }
@@ -46,6 +49,7 @@ export default {
     border-bottom: 1px solid #e8e8e8;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
     transition: all 0.5s ease;
+    background-color: hsla(0,0%,100%,.95);
 
     &.show-nav{
       transform: translateX(200px);
