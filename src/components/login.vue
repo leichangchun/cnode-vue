@@ -15,4 +15,12 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../assets/scss/common.scss";
+.login{
+  height: 100%;
+  background-color: $white;
+  text-align: center;
+  padding-top: 50%;   //padding 的百分比以宽度为基准
+  font-size: $font-title;
+}
 </style>

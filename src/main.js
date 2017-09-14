@@ -7,7 +7,7 @@ import router from './router'
 // import css及scss时 一定主要要在webpack.config中对应的loader中加入 include 否则会报错
 import './assets/scss/github-markdown.css'
 import './assets/font-awesome/scss/font-awesome.scss'
-import './assets/scss/common.scss'
+import './assets/scss/reset.css'
 
 Vue.config.productionTip = false
 

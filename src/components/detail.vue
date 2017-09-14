@@ -16,7 +16,7 @@
         </p>
       </div>
     </section>
-    
+
     <section class="detail-content markdown-body" v-html="detail.content">
 
     </section>
@@ -75,8 +75,8 @@ export default {
   .detail-page{
     height: 100%;
     padding-top: 45px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: scroll;
+    background-color: $white;
 
     .author-info{
       padding: $padding;
@@ -102,5 +102,9 @@ export default {
         }
       }
     }
+  }
+
+  .detail-content{
+    overflow: scroll;
   }
 </style>

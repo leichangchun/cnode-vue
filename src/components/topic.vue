@@ -1,9 +1,9 @@
 <template lang="html">
-  <div class="container" v-show="topics.length > 0">
+  <div class="container" v-show="topics.length > 0" @scroll="topicScroll">
     <div class="topic-mask" v-show="showNav" @click="changeNavAndMask"></div>
     <topicHeader :title="title" :show-menu="showMenu" :show-nav="showNav" v-on:change="changeNavAndMask"></topicHeader>
     <topicNav :class="{'show-nav' : showNav}"></topicNav>
-    <ul class="topic-list">
+    <ul class="topic-list" ref="topiclist">
       <li class="topic-item" v-for="topic in topics">
         <router-link :to="{ name: 'detail', params: {id : topic.id} }">
           <h3 :title="getTabInfo(topic.tab,topic.good,topic.top,false)" class="title single-row" :class="getTabInfo(topic.tab,topic.good,topic.top,true)">{{topic.title}}</h3>
@@ -47,31 +47,48 @@ export default {
       showNav: false
     }
   },
+  computed: {
+
+  },
   created () {
-    axios({
-      url: 'https://cnodejs.org/api/v1/topics?',
-      method: 'get',
-      params: this.params
-    }).then(res => {
-      console.log('load topics success!')
-      this.topics = res.data.data
-    }).catch(error => {
-      console.log('load topics failed!')
-      console.log(error)
-    })
+    this._loadData()
   },
   components: {
     topicHeader,
     topicNav
   },
   methods: {
-
+    _loadData: function () {
+      axios({
+        url: 'https://cnodejs.org/api/v1/topics?',
+        method: 'get',
+        params: this.params
+      }).then(res => {
+        console.log('load topics success!')
+        this.topics = res.data.data
+      }).catch(error => {
+        console.log('load topics failed!')
+        console.log(error)
+      })
+    },
     changeNavAndMask: function () {
       this.showNav = !this.showNav
     },
 
     getTabInfo: function (tab, good, top, isClass) {
       return util.getTabInfo(tab, good, top, isClass)
+    },
+    topicScroll: function (e) {
+      // e.target 为触发事件的元素  取其scrollTop
+      if (e.target.scrollTop > window.innerHeight) {
+        // console.log('show the goTop component')
+      } else {
+        // console.log('hidden the goTop component')
+      }
+
+      if (e.target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
+        // console.log('load more data')
+      }
     }
   },
   filters: {
@@ -88,6 +105,9 @@ export default {
     height: 100%;
     position: relative;
     padding-top: 45px;
+    background-color: $white;
+    overflow-y:scroll;
+    overflow-x: hidden;
 
     .topic-mask {
         position: absolute;
@@ -101,9 +121,6 @@ export default {
 
     .topic-list {
         width: 100%;
-        height: 100%; //是以父元素content的值为基数的
-        overflow-x: hidden;
-        overflow-y: scroll;
 
         .topic-item {
             width: 100%;
