@@ -47,7 +47,8 @@ export default {
       title: '全部',
       showMenu: true,
       showNav: false,
-      scrollTop: 0
+      scrollTop: 0,
+      scroll: true
     }
   },
   created () {
@@ -62,9 +63,11 @@ export default {
         this.$refs.container.scrollTop = tempData.scrollTop
       })
     } else {
-      this.tab = this.$route.query.tab || 'all'
+      this.params.tab = this.$route.query.tab || 'all'
+      this.title = this.getTabInfo(this.params.tab, false, false, false)
       this._loadData()
     }
+    console.log('topic created')
   },
   components: {
     topicHeader,
@@ -73,6 +76,7 @@ export default {
   },
   methods: {
     _loadData: function () {
+      console.log('_loadData')
       axios({
         url: 'https://cnodejs.org/api/v1/topics?',
         method: 'get',
@@ -92,14 +96,18 @@ export default {
     changeNavAndMask: function () {
       this.showNav = !this.showNav
     },
-
     getTabInfo: function (tab, good, top, isClass) {
       return util.getTabInfo(tab, good, top, isClass)
     },
     targetScroll: util.throttle(function () { // 节流 防止滚动事件的回调触发的太频繁
-      this.scrollTop = arguments[0].target.scrollTop
-      if (arguments[0].target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
-        this._loadData()
+      if (this.scroll) {
+        console.log('targetScroll start')
+        this.scrollTop = arguments[0].target.scrollTop
+        if (arguments[0].target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
+          this._loadData()
+        }
+      } else {
+        console.log('scroll is false')
       }
     }, 200, 500),
     goTopicTop: function () {
@@ -128,16 +136,27 @@ export default {
     // 同页面切换才会触发RouteUpdate,这时不会触发vue实例的钩子，所以要处理下数据
     if (to.query && to.query.tab) {
       this.params.tab = to.query.tab
+      this.title = this.getTabInfo(this.params.tab, false, false, false)
+      this.scrollTop = 0
+      this.$refs.container.scrollTop = 0
+      this.scroll = false
       this.params.page = 1
       this.topics = []
     }
 
-    // 异常 侧边导航栏
-    this.showNav = false
+    // 隐藏 侧边导航栏
+    this.showNav = !this.showNav
 
     this._loadData()
 
+    // bugfix 切换分类时会触发一次滚动事件，而此时的 topics已清空  所以会触发多加载一次数据
+    let self = this
+    window.setTimeout(function () {
+      self.scroll = true
+    }, 2000)
+
     console.log('route update')
+
     next()
   },
   beforeRouteLeave (to, from, next) {
@@ -147,6 +166,7 @@ export default {
       tempData.params = this.params
       tempData.topics = this.topics
       tempData.scrollTop = this.scrollTop
+      tempData.title = this.title
 
       window.sessionStorage.setItem('tempData', JSON.stringify(tempData))
     }
@@ -167,7 +187,7 @@ export default {
     overflow-x: hidden;
 
     .topic-mask {
-        position: absolute;
+        position: fixed;
         z-index: 3;
         left: 0;
         right: 0;
