@@ -1,6 +1,6 @@
 <template lang="html">
   <!-- 加入v-if 进行判断 防止在数据未加载完时因找不到字段而报错 -->
-  <article class="detail-page" v-if="detail.tab">
+  <article class="detail-page" v-if="detail.tab" ref='container' @scroll="targetScroll">
 
     <detail-header :show-menu="showMenu" :title="title"></detail-header>
 
@@ -24,11 +24,14 @@
     <section class="detail-replies">
 
     </section>
+
+    <gotop :target-scroll-top="scrollTop" v-on:go-page-top="goTopicTop"></gotop>
   </article>
 </template>
 
 <script>
 import detailHeader from './header.vue'
+import gotop from './gotop.vue'
 import * as util from '../assets/js/utils'
 import axios from 'axios'
 export default {
@@ -36,7 +39,8 @@ export default {
     return {
       detail: [],
       showMenu: false,
-      title: '主题'
+      title: '主题',
+      scrollTop: 0
     }
   },
   created () {
@@ -56,10 +60,17 @@ export default {
   methods: {
     getTabInfo: function (tab, good, top, isClass) {
       return util.getTabInfo(tab, good, top, isClass)
-    }
+    },
+    goTopicTop: function () {
+      util.scrollToTop(this.$refs.container, 5, 10)
+    },
+    targetScroll: util.throttle(function () { // 节流 防止滚动事件的回调触发的太频繁
+      this.scrollTop = arguments[0].target.scrollTop
+    }, 200, 500)
   },
   components: {
-    detailHeader
+    detailHeader,
+    gotop
   },
   filters: {
     formatDate: function (value) {
