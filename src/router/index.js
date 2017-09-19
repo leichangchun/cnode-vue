@@ -7,6 +7,7 @@ import index from '../components/index.vue'
 const topic = () => import('../components/topic.vue')
 const login = () => import('../components/login.vue')
 const detail = () => import('../components/detail.vue')
+const about = () => import('../components/about.vue')
 Vue.use(Router)
 
 export default new Router({
@@ -26,6 +27,10 @@ export default new Router({
       path: '/detail/:id',
       name: 'detail',
       component: detail
+    }, {
+      path: '/about',
+      name: 'about',
+      component: about
     }
   ]
 })
