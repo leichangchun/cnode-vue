@@ -27,7 +27,7 @@ export default {
   .topic-nav{
     width: 200px;
     height: 100%;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: -200px;
     z-index: 5;
