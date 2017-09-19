@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="container" v-show="topics.length > 0" @scroll="topicScroll">
+  <div class="container" v-show="topics.length > 0" @scroll="targetScroll" ref="container">
     <div class="topic-mask" v-show="showNav" @click="changeNavAndMask"></div>
     <topicHeader :title="title" :show-menu="showMenu" :show-nav="showNav" v-on:change="changeNavAndMask"></topicHeader>
     <topicNav :class="{'show-nav' : showNav}"></topicNav>
@@ -23,6 +23,7 @@
         </router-link>
       </li>
     </ul>
+    <gotop :target-scroll-top="scrollTop" v-on:go-page-top="goTopicTop"></gotop>
   </div>
 </template>
 
@@ -30,6 +31,7 @@
 import axios from 'axios'
 import topicHeader from './header'
 import topicNav from './topicnav.vue'
+import gotop from './gotop.vue'
 import * as util from '../assets/js/utils.js'
 export default {
   name: 'topic',
@@ -44,18 +46,30 @@ export default {
       },
       title: '全部',
       showMenu: true,
-      showNav: false
+      showNav: false,
+      scrollTop: 0
     }
   },
-  computed: {
-
-  },
   created () {
-    this._loadData()
+    // 有缓存 就用缓存   没缓存 重新加载
+    if (window.sessionStorage.getItem('tempData')) {
+      let tempData = JSON.parse(window.sessionStorage.getItem('tempData'))
+
+      this.topics = tempData.topics
+      this.params = tempData.params
+
+      this.$nextTick(() => {
+        this.$refs.container.scrollTop = tempData.scrollTop
+      })
+    } else {
+      this.tab = this.$route.query.tab || 'all'
+      this._loadData()
+    }
   },
   components: {
     topicHeader,
-    topicNav
+    topicNav,
+    gotop
   },
   methods: {
     _loadData: function () {
@@ -65,10 +79,14 @@ export default {
         params: this.params
       }).then(res => {
         console.log('load topics success!')
-        this.topics = res.data.data
+
+        // 每次加载后 将数据push到 topics 中；topics中是所有要展示的数据
+        res.data.data.forEach((value, index) => {
+          this.topics.push(value)
+        })
+        this.params.page++
       }).catch(error => {
-        console.log('load topics failed!')
-        console.log(error)
+        console.log('load topics failed!' + error)
       })
     },
     changeNavAndMask: function () {
@@ -78,23 +96,62 @@ export default {
     getTabInfo: function (tab, good, top, isClass) {
       return util.getTabInfo(tab, good, top, isClass)
     },
-    topicScroll: function (e) {
-      // e.target 为触发事件的元素  取其scrollTop
-      if (e.target.scrollTop > window.innerHeight) {
-        // console.log('show the goTop component')
-      } else {
-        // console.log('hidden the goTop component')
+    targetScroll: util.throttle(function () { // 节流 防止滚动事件的回调触发的太频繁
+      this.scrollTop = arguments[0].target.scrollTop
+      if (arguments[0].target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
+        this._loadData()
       }
-
-      if (e.target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
-        // console.log('load more data')
-      }
+    }, 200, 500),
+    goTopicTop: function () {
+      util.scrollToTop(this.$refs.container, 5, 10)
     }
   },
   filters: {
     formatDate: function (value) {
       return util.formatDate(value, true)
     }
+  },
+  watch: {
+    '$route' (to, from) { // 复用组件时，想对路由参数的变化作出响应的话，你可以简单地 watch（监测变化） $route 对象
+      console.log('route watch')
+    }
+  },
+  beforeRouteEnter (to, from, next) {
+    if (from.name !== 'detail') {  // 如果不是从详情页返回 则清掉缓存
+      if (window.sessionStorage.getItem('tempData')) {
+        window.sessionStorage.removeItem('tempData')
+      }
+    }
+    next()
+  },
+  beforeRouteUpdate (to, from, next) {
+    // 同页面切换才会触发RouteUpdate,这时不会触发vue实例的钩子，所以要处理下数据
+    if (to.query && to.query.tab) {
+      this.params.tab = to.query.tab
+      this.params.page = 1
+      this.topics = []
+    }
+
+    // 异常 侧边导航栏
+    this.showNav = false
+
+    this._loadData()
+
+    console.log('route update')
+    next()
+  },
+  beforeRouteLeave (to, from, next) {
+    let tempData = {}
+    // 如果是离开topic页，则缓存当前的部分参数
+    if (to.name !== 'topic') {
+      tempData.params = this.params
+      tempData.topics = this.topics
+      tempData.scrollTop = this.scrollTop
+
+      window.sessionStorage.setItem('tempData', JSON.stringify(tempData))
+    }
+    console.log('route leave')
+    next()
   }
 }
 </script>
