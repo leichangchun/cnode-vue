@@ -53,6 +53,7 @@ function timeAgo (date) {
   return timeAgo.format(date, 'zh_CN')
 }
 
+// 需加自己解析出特定格式的时间
 function resolveDate (date) {
 
 }
@@ -70,4 +71,57 @@ export function formatDate (date, humanity) {
   } else {
     resolveDate(date)
   }
+}
+
+/**
+ * 节流函数
+ * @method throttle
+ * @param  {Function} fn      待执行的函数
+ * @param  {Number}   delay   延时
+ * @param  {Number}   atleast 最小执行间隔
+ * @return {[type]}           [description]
+ */
+export function throttle (fn, delay, atleast) {
+  let timer = null
+  let startTime = new Date()
+
+  return function () {
+    let context = this
+    let args = arguments
+    let curTime = new Date()
+
+    clearTimeout(timer)
+    if (curTime - startTime >= atleast) {
+      fn.apply(context, args)   // apply 指定函数指向的 上下文(this) 和 参数列表
+      startTime = curTime
+    } else {
+      timer = setTimeout(function () {
+        fn.apply(context, args)
+      }, delay)
+    }
+  }
+}
+
+/**
+ * 按一定比率回到顶部
+ * @method scrollToTop
+ * @param  {DOM}    scrollDom 滚动的元素
+ * @param  {Number}    scale     时间间隔
+ * @param  {Number}    time      比率
+ * @return {Null}              未指定返回值
+ */
+export function scrollToTop (scrollDom, scale, time) {
+  // 每次向顶部滚动 1/5 直至小于10
+  let scrolling = setInterval(() => {
+    let curScrollTop = scrollDom.scrollTop
+    if (curScrollTop < 10) {
+      curScrollTop *= scale
+    }
+
+    if (curScrollTop < 1) {
+      clearInterval(scrolling)
+    }
+
+    scrollDom.scrollTop -= curScrollTop / scale
+  }, time)
 }
