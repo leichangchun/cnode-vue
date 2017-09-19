@@ -1,12 +1,17 @@
 <template lang="html">
   <nav class="topic-nav">
-    <section class="user-info">
+    <section class="user-info line-bottom">
       <div class="login">
-        <span class="fa fa-user-circle-o"></span><span>登录</span>
+        <router-link :to="{ name: 'login'}"><span class="fa fa-user-circle-o"></span><span>登录</span></router-link>
       </div>
     </section>
     <section class="item-ul">
-      
+      <li><router-link :to="{ name: 'topic', query: {tab : 'all'} }" class="fa fa-align-justify">全部</router-link></li>
+      <li><router-link :to="{ name: 'topic', query: {tab : 'good'} }" class="fa fa-thumbs-o-up">精品</router-link></li>
+      <li><router-link :to="{ name: 'topic', query: {tab : 'share'} }" class="fa fa-share-alt">分享</router-link></li>
+      <li><router-link :to="{ name: 'topic', query: {tab : 'ask'} }" class="fa fa-question-circle">问答</router-link></li>
+      <li class="line-bottom"><router-link :to="{ name: 'topic', query: {tab : 'job'} }" class="fa fa-address-book-o">招聘</router-link></li>
+      <li><router-link :to="{ name: 'about'}" class="fa fa-exclamation-circle">关于</router-link></li>
     </section>
   </nav>
 </template>
@@ -38,7 +43,7 @@ export default {
       padding: 15px;
 
       .login{
-        padding: 8px 9px;
+        padding: 16px 9px;
 
         span{
           height: 24px;
@@ -57,5 +62,26 @@ export default {
       }
     }
 
+    .item-ul{
+      padding: 8px 9px;
+
+      li{
+        padding: 10px 0;
+
+        a{
+
+          width: 100%;
+          height: 100%;
+          text-indent: 10px;
+          font-size: $font-title;
+          font-weight: 700;
+          color: $color31;
+          &::before{
+            padding-right: 20px;
+            padding-left: 20px;
+          }
+        }
+      }
+    }
   }
 </style>
