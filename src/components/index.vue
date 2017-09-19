@@ -1,7 +1,9 @@
 <template lang="html">
-  <div class="logo-container">
-    <img src="../assets/logo.png" alt="Logo">
-    <p>{{text}}</p>
+  <div class="index-container">
+    <div class="logo-container">
+      <img src="../assets/logo.png" alt="Logo">
+      <p>{{text}}</p>
+    </div>
   </div>
 </template>
 
@@ -34,18 +36,25 @@ export default {
 </script>
 
 <style lang="scss">
-  .logo-container{
-    width: 200px;
-    margin : 20vh auto 0;
+  .index-container{
 
-    img{
-      width: 100%;
-    }
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff;
 
-    p{
-      text-align: center;
-      font-size: 18px;
-      font-weight: 400;
+    .logo-container{
+      width: 200px;
+      margin : 20vh auto 0;
+
+      img{
+        width: 100%;
+      }
+
+      p{
+        text-align: center;
+        font-size: 18px;
+        font-weight: 400;
+      }
     }
   }
 </style>
