@@ -20,6 +20,14 @@ export function getTabInfo (tab, good, top, isClass) {
     className = 'good'
   } else {
     switch (tab) {
+      case 'top':
+        type = '置顶'
+        className = 'top'
+        break
+      case 'good':
+        type = '精品'
+        className = 'good'
+        break
       case 'share':
         type = '分享'
         className = 'share'
@@ -31,6 +39,10 @@ export function getTabInfo (tab, good, top, isClass) {
       case 'job':
         type = '招聘'
         className = 'job'
+        break
+      case 'all':
+        type = '全部'
+        className = 'all'
         break
       default:
         type = '暂无'
