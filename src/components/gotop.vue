@@ -10,7 +10,7 @@ export default {
   computed: {
     toggleGoTop () {
       // 滑动一屏幕的距离 则展示回到顶部组件
-      if (this.targetScrollTop > window.innerHeight) {
+      if (this.targetScrollTop > window.innerHeight / 2) {
         return true
       } else {
         return false
