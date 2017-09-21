@@ -2,7 +2,7 @@
   <div class="container">
     <topicHeader :title="title" :show-menu="false" :show-nav="false"></topicHeader>
     <p>
-      参考了github上大神的开源项目，学习并完成了 基于ES6 + vue-cli + vue2.0 + vue-router + axios -- 模拟node社区部分功能的网页应用
+      参考了github上大神的开源项目，学习并完成了 基于ES6 + vue-cli + vue2.0 + vue-router + axios + vuex -- 模拟node社区部分功能的网页应用
       虽然部分地方还有待完善，但自觉已受益匪浅，加油加油，每天进步一点点！！！
     </p>
   </div>
