@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="container" v-show="topics.length > 0" @scroll="targetScroll" ref="container">
     <div class="topic-mask" v-show="showNav" @click="changeNavAndMask"></div>
-    <topicHeader :title="title" :show-menu="showMenu" :show-nav="showNav" v-on:change="changeNavAndMask"></topicHeader>
+    <topicHeader :title="title" :show-menu="showMenu" :show-nav="showNav" v-on:change="changeNavAndMask" :show-add="true"></topicHeader>
     <topicNav :class="{'show-nav' : showNav}"></topicNav>
     <ul class="topic-list" ref="topiclist">
       <li class="topic-item" v-for="topic in topics">
@@ -125,7 +125,7 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (from.name !== 'detail') {  // 如果不是从详情页返回 则清掉缓存
+    if (['detail', 'login'].indexOf(from.name) < 0) {  // 如果不是从 指定页 返回 则清掉缓存
       if (window.sessionStorage.getItem('tempData')) {
         window.sessionStorage.removeItem('tempData')
       }

@@ -2,7 +2,8 @@
   <nav class="topic-nav">
     <section class="user-info line-bottom">
       <div class="login">
-        <router-link :to="{ name: 'login'}"><span class="fa fa-user-circle-o"></span><span>登录</span></router-link>
+        <router-link :to="{ name: 'login'}" v-if="!isLogin"><span class="fa fa-user-circle-o"></span><span>登录</span></router-link>
+        <router-link :to="{ name: 'login'}" v-else><img :src="url"><p>{{name}}</p></router-link>
       </div>
     </section>
     <section class="item-ul">
@@ -17,7 +18,15 @@
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
 export default {
+  computed: {
+    ...mapGetters([
+      'isLogin',
+      'name',
+      'url'
+    ])
+  }
 }
 </script>
 
@@ -58,6 +67,16 @@ export default {
           color: $color42b;
           margin-right: 12px;
           font-size: 24px;
+        }
+        img{
+          display: block;
+          width: 36px;
+          margin: 0 auto;
+          border-radius:50%;
+        }
+        p{
+          text-align: center;
+          padding: 5px;
         }
       }
     }

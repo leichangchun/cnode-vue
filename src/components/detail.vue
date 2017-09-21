@@ -2,7 +2,7 @@
   <!-- 加入v-if 进行判断 防止在数据未加载完时因找不到字段而报错 -->
   <article class="detail-page" v-if="detail.tab" ref='container' @scroll="targetScroll">
 
-    <detail-header :show-menu="showMenu" :title="title"></detail-header>
+    <detail-header :show-menu="showMenu" :title="title" :show-login="true"></detail-header>
 
     <section class="author-info">
       <img :src="detail.author.avatar_url" alt="作者头像">

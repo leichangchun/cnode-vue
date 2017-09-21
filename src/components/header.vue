@@ -8,8 +8,8 @@
       </div>
       <span class="title">{{title}}</span>
       <!-- 传一个带参数对象时  是 :to -->
-      <router-link to="/login" class="right-login">
-        <span class="fa fa-user-circle-o"></span>
+      <router-link to="/add" class="right-login" v-show="showAdd">
+        <span class="fa fa-plus"></span>
       </router-link>
     </header>
 </template>
@@ -23,7 +23,8 @@ export default {
   props: {
     showMenu: Boolean,
     title: String,
-    showNav: Boolean
+    showNav: Boolean,
+    showAdd: Boolean
   },
   methods: {
     toggleNav: function () {
@@ -91,6 +92,13 @@ export default {
 
       span{
         color : $color42b;
+      }
+
+      img{
+        display: block;
+        margin: 8px;
+        width: 33px;
+        border-radius: 50%;
       }
     }
   }
