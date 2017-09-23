@@ -58,6 +58,7 @@ export default {
           loginname: data.loginname,
           avatarurl: data.avatar_url
         })
+        window.sessionStorage.setItem('accessToken', this.accessToken)
         // token 验证通过后，清空输入框
         this.accessToken = ''
 
