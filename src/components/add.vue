@@ -1,9 +1,9 @@
 <template lang="html">
-  <div class="add-container">
+  <div class="add-container" ref='addContainer'>
     <addheader :show-menu="false" title="新增主题" :show-nav="false" :show-add="false"></addheader>
-    <div class="add-topic-tab" @click="toggleTab">
+    <div class="add-topic-tab">
       <span class="topic-tab-title">主题类别</span>
-      <div class="topic-tab" :class="{'show-tab' : showTab}">
+      <div class="topic-tab" :class="{'show-tab' : showTab}" @click="toggleTab">
         <span class="tab-text">{{tabText}}</span>
         <div class="tabs">
           <div class="tab-item" @click="selectTab('dev','测试')">测试</div>
@@ -13,13 +13,13 @@
         </div>
         <span class="fa fa-sort-desc"></span>
       </div>
-      <button class="add-btn">发布</button>
+      <button class="add-btn" @click="addTopic">发布</button>
     </div>
     <div class="add-title">
-      <input type="text" name="title" placeholder="请输入标题" v-model="topic.title">
+      <input type="text" name="title" placeholder="请输入标题,不少于10个字符" v-model="topic.title" @focus="removeErrorClass">
     </div>
     <div class="add-content">
-      <textarea name="name" rows="8" cols="80" placeholder="请输入内容，支持markdown语法" v-model="topic.content"></textarea>
+      <textarea name="name" rows="8" cols="80" placeholder="请输入内容，支持markdown语法" v-model="topic.content" @focus="removeErrorClass"></textarea>
     </div>
 
   </div>
@@ -27,6 +27,7 @@
 
 <script>
 import addheader from './header.vue'
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -41,12 +42,62 @@ export default {
     }
   },
   methods: {
-    toggleTab: function () {
+    toggleTab: function (e) {
       this.showTab = !this.showTab
+      e.target.classList.remove('error-border')
     },
     selectTab: function (tab, text) {
       this.tabText = text
       this.topic.tab = tab
+    },
+    addTopic: function () {
+      if (this._check()) {
+        axios({
+          url: '/topics',
+          method: 'post',
+          data: this.topic,
+          baseURL: 'https://cnodejs.org/api/v1'
+        }).then(res => {
+          let data = res.data
+          if (data.success === true) {
+            console.log('add new topic success')
+            this.$router.replace({
+              name: 'detail',
+              params: {
+                id: data.topic_id
+              }
+            })
+          }
+        }).catch(error => {
+          let data = error.response.data
+          alert(data.error_msg)
+        })
+      }
+    },
+    _check: function () {
+      let container = this.$refs.addContainer
+      let type = container.querySelector('.topic-tab .tab-text')
+      let title = container.querySelector('.add-title input')
+      let content = container.querySelector('.add-content textarea')
+
+      if (this.topic.tab === '') {
+        type.classList.add('error-border')
+      } else {
+        if (this.topic.title === '') {
+          title.classList.add('error-border')
+        } else {
+          if (this.topic.content === '') {
+            content.classList.add('error-border')
+          } else {
+            return true
+          }
+        }
+      }
+
+      return false
+    },
+    removeErrorClass: function (e) {
+      e.target.classList.remove('error-border')
     }
   },
   components: {
@@ -62,8 +113,6 @@ export default {
   height: 100%;
   background-color: $white;
   padding-top: 45px;
-  display: flex;
-  flex-direction: column;
 
   .add-topic-tab{
     padding: $padding;
@@ -163,7 +212,7 @@ export default {
 
   .add-content{
     padding: $padding;
-    flex: 1;
+    height: calc(100vh - 165px);
 
     textarea{
       width: 100%;
@@ -171,6 +220,10 @@ export default {
       border-radius: $radius;
       padding: 5px;
     }
+  }
+
+  .error-border{
+    border: 1px solid red;
   }
 }
 
