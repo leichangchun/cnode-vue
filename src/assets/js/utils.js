@@ -44,10 +44,13 @@ export function getTabInfo (tab, good, top, isClass) {
         type = '全部'
         className = 'all'
         break
+      case 'dev':
+        type = '测试'
+        className = 'all'
+        break
       default:
         type = '暂无'
         className = 'none'
-
     }
   }
 
