@@ -11,6 +11,7 @@
       <li><router-link :to="{ name: 'topic', query: {tab : 'good'} }" class="fa fa-thumbs-o-up">精品</router-link></li>
       <li><router-link :to="{ name: 'topic', query: {tab : 'share'} }" class="fa fa-share-alt">分享</router-link></li>
       <li><router-link :to="{ name: 'topic', query: {tab : 'ask'} }" class="fa fa-question-circle">问答</router-link></li>
+      <li><router-link :to="{ name: 'topic', query: {tab : 'dev'} }" class="fa fa-exclamation-triangle">测试</router-link></li>
       <li class="line-bottom"><router-link :to="{ name: 'topic', query: {tab : 'job'} }" class="fa fa-address-book-o">招聘</router-link></li>
       <li><router-link :to="{ name: 'about'}" class="fa fa-exclamation-circle">关于</router-link></li>
     </section>
