@@ -6,7 +6,7 @@
       <div class="topic-tab" :class="{'show-tab' : showTab}" @click="toggleTab">
         <span class="tab-text">{{tabText}}</span>
         <div class="tabs">
-          <div class="tab-item" @click="selectTab('dev','测试')">测试</div>
+          <div class="tab-item" @click="selectTab('dev','测试')">测试（推荐）</div>
           <div class="tab-item" @click="selectTab('ask','问答')">问答</div>
           <div class="tab-item" @click="selectTab('share','分享')">分享</div>
           <div class="tab-item" @click="selectTab('job','招聘')">招聘</div>
