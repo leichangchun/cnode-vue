@@ -36,5 +36,3 @@ let store = new Vuex.Store({
   }
 })
 export default store
-
-// c9e18ce5-f00b-48c3-886a-6b7fc427521d
