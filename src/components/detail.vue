@@ -16,7 +16,7 @@
         </p>
       </div>
     </section>
-
+    <!-- 文章的内容是HTML格式的   所以使用v-html -->
     <section class="detail-content markdown-body" v-html="detail.content">
 
     </section>
@@ -117,5 +117,7 @@ export default {
 
   .detail-content{
     overflow: scroll;
+    margin-bottom: $padding;
+    border-bottom: 1px solid #dddddd;
   }
 </style>

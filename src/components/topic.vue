@@ -101,7 +101,6 @@ export default {
     },
     targetScroll: util.throttle(function () { // 节流 防止滚动事件的回调触发的太频繁
       if (this.scroll) {
-        console.log('targetScroll start')
         this.scrollTop = arguments[0].target.scrollTop
         if (arguments[0].target.scrollTop + window.innerHeight > this.$refs.topiclist.offsetHeight + 45 - 100) {
           this._loadData()
