@@ -112,6 +112,7 @@ export function throttle (fn, delay, atleast) {
     } else {
       timer = setTimeout(function () {
         fn.apply(context, args)
+        startTime = curTime
       }, delay)
     }
   }
