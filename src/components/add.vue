@@ -37,7 +37,7 @@ export default {
         tab: '',
         title: '',
         content: '',
-        accesstoken: window.sessionStorage.getItem('accessToken')
+        accesstoken: this.$store.state.userinfo.accessToken
       }
     }
   },
