@@ -12,6 +12,6 @@ npm install
 npm run dev
 
 # 登录请使用 cnode社区的accessToken
-查看线上效果 :  @https://leichangchun.github.io/cnode-vue/dist/#/
+查看线上效果 :  https://leichangchun.github.io/cnode-vue/dist/#/
 
 ```
