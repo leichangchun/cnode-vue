@@ -13,7 +13,7 @@
     <template v-else>
       <div class="login-info">
         <img :src="url_I" class="login-user-img">
-        <p class="login-user-name">用户 <span>{{name}}</span> 已登录</p>
+        <p class="login-user-name">用户：<span>{{name}}</span></p>
         <span class="login-out fa fa-sign-out" @click="loginOut"></span>
         <span class="login-score" v-show="userInfo.score"><span>积分 ： </span>{{userInfo.score}}</span>
       </div>
@@ -90,7 +90,8 @@ export default {
         // token 验证通过后，写入store 标志登录成功
         this.$store.commit('ADD_USER_INFO', {
           loginname: data.loginname,
-          avatarurl: data.avatar_url
+          avatarurl: data.avatar_url,
+          accessToken: this.accessToken
         })
         window.sessionStorage.setItem('accessToken', this.accessToken)
         // token 验证通过后，清空输入框
